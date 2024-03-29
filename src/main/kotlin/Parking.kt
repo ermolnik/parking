@@ -28,6 +28,7 @@ internal object Parking {
                 CommandImpl.ParkStatus.command -> {
                     println("Всего мест: ${Constants.parkingSize}")
                     println("Загрузка: ${manager.getParkingLoad(parking)}/${Constants.parkingSize}")
+                    println("Что-то еще?")
                 }
 
                 CommandImpl.GetCar.command -> {
@@ -50,6 +51,7 @@ internal object Parking {
                         println("Эта машина припаркована на $it")
 
                     } ?: println("Такой машины нет на парковке")
+                    println("Что-то еще?")
                 }
 
                 CommandImpl.ParkInfoByPlace.command -> {
@@ -58,10 +60,12 @@ internal object Parking {
                         println("На этом месте припаркована $it")
 
                     } ?: println("На этом месте ничего не припарковано")
+                    println("Что-то еще?")
                 }
 
                 CommandImpl.ParkAllStats.command -> {
                     println("Сегодня было припарковано: $parkingLoad")
+                    println("Что-то еще?")
                 }
 
                 CommandImpl.End.command -> break
