@@ -9,19 +9,23 @@ internal class Manager {
         val number = CommandImpl.Park.getCarNumber()
         val car = Car(model, color, number, owner)
 
-        println("$car припаркована")
+        println("Ищу куда припарковать $car")
         return car
     }
 
-    fun returnAuto() {
-
+    fun returnAuto(parking: Map<String, Car?>): Car? {
+        return CommandImpl.GetCar.execute(parking)
     }
 
-    fun getParkingLoad() {
-
+    fun getParkingLoad(parking: Map<String, Car?>): Int {
+        return parking.filter { it.value != null }.size
     }
 
-    fun getLoadStatistic() {
+    fun getInfoByCar(model: Model, parking: Map<String, Car?>): String? {
+        return parking.entries.find { it.value?.model == model }?.key
+    }
 
+    fun getInfoByPlace(place: String, parking: Map<String, Car?>): Car? {
+        return parking.entries.find { it.key == place }?.value
     }
 }

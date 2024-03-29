@@ -20,12 +20,14 @@ internal sealed class CommandImpl(val command: String) : Command {
     data object Help : CommandImpl("/help") {
         override fun message() {
             println("Доступные комманды:")
-            println("1. Запуск программы - /start;")
-            println("2. Запарковать автомобиль - /park;")
-            println("3. Возвратить автомобиль - /return;")
-            println("4. Поиск машины по номеру - /park_info_by_car;")
-            println("5. Справка по месту парковки - /park_info_by_place;")
-            println("6. Завершение программы - /end.")
+            println("1. Запуск программы - ${Start.command};")
+            println("2. Запарковать автомобиль - ${Park.command};")
+            println("3. Возвратить автомобиль - ${GetCar.command};")
+            println("4. Поиск машины по номеру - ${ParkInfoByCar.command};")
+            println("5. Справка по месту парковки - ${ParkInfoByPlace.command};")
+            println("6. Загрузка парковки - ${ParkStatus.command};")
+            println("7. Cколько всего машин было припарковано - ${ParkAllStats.command};")
+            println("8. Завершение программы - ${End.command};")
         }
     }
 
@@ -43,7 +45,7 @@ internal sealed class CommandImpl(val command: String) : Command {
         }
 
         fun getCarModel(): Model {
-            println("Введите произвотель и модель машины")
+            println("Введите произвдителя и модель машины")
             val model = readln()
             return if (model.split(" ").size == 2) {
                 Model(model.split(" ")[0], model.split(" ")[1])
@@ -76,31 +78,64 @@ internal sealed class CommandImpl(val command: String) : Command {
 
     data object ParkStatus : CommandImpl("/park_stats") {
         override fun message() {
-            TODO("Not yet implemented")
+            println("Текущий статус парковки:")
         }
     }
 
     data object GetCar : CommandImpl("/return") {
         override fun message() {
-            TODO("Not yet implemented")
+            println("Следуйте инструкциям чтобы получить автомобиль")
+        }
+
+        fun execute(parking: Map<String, Car?>): Car? {
+            println("Введите имя и фамилию владельца")
+            val name = readln()
+            val owner = if (name.split(" ").size == 2) {
+                Owner(name.split(" ")[0], name.split(" ")[1])
+            } else Park.getOwner()
+
+            println("Введите производителя и модель машины")
+            val model = readln()
+            val car = if (model.split(" ").size == 2) {
+                Model(model.split(" ")[0], model.split(" ")[1])
+            } else Park.getCarModel()
+
+            parking.values.forEach {
+                if (it?.owner == owner && it.model == car) {
+                    return it
+                }
+            }
+            return null
         }
     }
 
     data object ParkInfoByCar : CommandImpl("/park_info_by_car") {
         override fun message() {
-            TODO("Not yet implemented")
+            println("Напишите марку и модель автомобиля")
+        }
+
+        fun execute(): Model {
+            val input = readln()
+            val car = if (input.split(" ").size == 2) {
+                Model(input.split(" ")[0], input.split(" ")[1])
+            } else Park.getCarModel()
+            return car
         }
     }
 
     data object ParkInfoByPlace : CommandImpl("/park_info_by_place") {
         override fun message() {
-            TODO("Not yet implemented")
+            println("Напишите место парковки")
+        }
+
+        fun execute(): String {
+            return readln()
         }
     }
 
-    data object GetParkStats : CommandImpl("/park_all_stats") {
+    data object ParkAllStats : CommandImpl("/park_all_stats") {
         override fun message() {
-            TODO("Not yet implemented")
+            println("Статус парковки за все время:")
         }
     }
 }
